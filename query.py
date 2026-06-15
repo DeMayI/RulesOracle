@@ -25,10 +25,13 @@ collection = _get_collection()
 
 # --- LLM ---
 
-llm = ChatGoogleGenerativeAI(
-    model="gemini-2.0-flash",
-    google_api_key=os.environ["GEMINI_API_KEY"],
-)
+def _make_llm(model: str):
+    return ChatGoogleGenerativeAI(model=model, google_api_key=os.environ["GEMINI_API_KEY"])
+
+llm = _make_llm("gemini-3.5-flash").with_fallbacks([
+    _make_llm("gemini-2.5-flash"),
+    _make_llm("gemini-2.0-flash"),
+])
 
 SYSTEM = SystemMessage(content=(
     "You are a rules assistant for a custom independent fan-made Warhammer 40K ruleset. "
