@@ -54,13 +54,19 @@ def retrieve(state: RAGState) -> RAGState:
     results = collection.query(query_texts=[state["question"]], n_results=8)
     return {"chunks": results["documents"][0]}
 
+def _text(response) -> str:
+    c = response.content
+    if isinstance(c, list):
+        return "".join(block.get("text", "") if isinstance(block, dict) else str(block) for block in c)
+    return str(c)
+
 def generate(state: RAGState) -> RAGState:
     context = "\n\n---\n\n".join(state["chunks"])
     response = llm.invoke([
         SYSTEM,
         HumanMessage(content=f"Rules excerpts:\n{context}\n\nQuestion: {state['question']}"),
     ])
-    return {"draft": response.content}
+    return {"draft": _text(response)}
 
 def validate(state: RAGState) -> RAGState:
     context = "\n\n---\n\n".join(state["chunks"])
@@ -74,7 +80,7 @@ def validate(state: RAGState) -> RAGState:
             "If not, correct any unsupported claims or state the rules don't cover it."
         )),
     ])
-    return {"answer": response.content}
+    return {"answer": _text(response)}
 
 # --- Graph ---
 
