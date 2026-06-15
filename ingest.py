@@ -58,6 +58,8 @@ def build_collection(db):
             docs.append(chunk)
             ids.append(f"{rel}-{i}")
             metas.append({"source": rel})
+    if not docs:
+        raise RuntimeError(f"No markdown files found under {data_root} — check that data/ is present.")
     collection.upsert(documents=docs, ids=ids, metadatas=metas)
     print(f"Ingested {len(docs)} chunks from data/")
     return collection
