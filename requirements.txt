@@ -1,5 +1,5 @@
 chromadb
-google-genai
+langchain-google-genai
+langgraph
 python-dotenv
-tenacity
 streamlit

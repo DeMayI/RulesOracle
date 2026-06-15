@@ -176,6 +176,7 @@ Every model is equipped with a Relic Gauss Blaster and Close Combat weapon.
 - 1 Models: 50pts
 
 ##### Keywords NECRONS, INFANTRY, CHARACTER, CRYPTEK, PLASMANCER
+
 ## Battleline
 ### Necron Warriors
 | M | BS | WS | T | W | Sv | Inv | I | AC | Ld | CL | Wil | Int | OC |
