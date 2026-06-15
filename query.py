@@ -12,7 +12,15 @@ client = genai.Client()
 embed_fn = embedding_functions.DefaultEmbeddingFunction()
 
 db = chromadb.PersistentClient(path="./chroma_db")
-collection = db.get_collection(name="ruleset", embedding_function=embed_fn)
+
+def _get_collection():
+    existing = {c.name for c in db.list_collections()}
+    if "ruleset" not in existing:
+        from ingest import build_collection
+        build_collection(db)
+    return db.get_collection(name="ruleset", embedding_function=embed_fn)
+
+collection = _get_collection()
 
 SYSTEM = (
     "You are a rules assistant for a custom Independent fan-made Warhammer 40K ruleset"
